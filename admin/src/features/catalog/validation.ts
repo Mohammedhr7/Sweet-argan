@@ -1,0 +1,9 @@
+import { z } from 'zod';
+export const slug=z.string().min(1).max(150).regex(/^[a-z0-9]+(-[a-z0-9]+)*$/,'Utilisez des minuscules, chiffres et tirets.');
+const short=z.string().trim().max(500);const long=z.string().trim().max(10000);
+export const imageUrl=z.string().max(2000).refine(v=>v===''||v.startsWith('/assets/brand/')||(/^https:\/\//.test(v)&&v.includes('/storage/v1/object/public/')),'Utilisez une image téléversée.');
+export const productSchema=z.object({name:z.string().trim().min(2).max(200),slug,category_id:z.union([z.uuid(),z.literal('')]),sku:z.string().max(100),price:z.number().min(0).max(1000000),compare_at_price:z.number().min(0).max(1000000).nullable(),stock_quantity:z.number().int().min(0).max(1000000),track_inventory:z.boolean(),is_active:z.boolean(),is_featured:z.boolean(),is_best_seller:z.boolean(),short_description:short,description:long,ingredients:long,usage_instructions:long,benefits:long,keywords:short,seo_title:z.string().max(100),seo_description:z.string().max(300)}).refine(v=>v.compare_at_price===null||v.compare_at_price>=v.price,{message:'Le prix barré doit être supérieur au prix.',path:['compare_at_price']});
+export const imagesSchema=z.array(z.object({image_url:imageUrl.refine(v=>v!==''),alt_text:z.string().max(200),sort_order:z.number().int().min(0)})).max(12);
+export const variantsSchema=z.array(z.object({id:z.uuid().optional(),name:z.string().min(1).max(100),sku:z.string().max(100),price:z.number().min(0).max(1000000),stock_quantity:z.number().int().min(0).max(1000000),is_active:z.boolean()})).max(30);
+export const categorySchema=z.object({name:z.string().trim().min(2).max(100),slug,description:long,image_url:imageUrl,is_active:z.boolean(),sort_order:z.number().int().min(0).max(10000)});
+export type ProductInput=z.infer<typeof productSchema>;

@@ -1,0 +1,1 @@
+'use client';export default function ErrorPage({reset}:{reset:()=>void}){return <div className="container section empty-state"><h2>Un instant, s’il vous plaît.</h2><p>Nous n’avons pas pu charger cette page.</p><button className="button" onClick={reset}>Réessayer</button></div>;}

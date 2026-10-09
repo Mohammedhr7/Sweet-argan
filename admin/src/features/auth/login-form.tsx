@@ -1,0 +1,3 @@
+"use client";
+import { useActionState } from 'react';import { login } from './actions';
+export function LoginForm(){const [state,action,pending]=useActionState(login,{error:''});return <form action={action}><label htmlFor="email">Adresse e-mail</label><input id="email" name="email" type="email" autoComplete="username" required/><label htmlFor="password">Mot de passe</label><input id="password" name="password" type="password" autoComplete="current-password" required/>{state.error&&<p className="error" role="alert">{state.error}</p>}<button className="button" disabled={pending} style={{width:'100%',marginTop:24}}>{pending?'Connexion…':'Se connecter →'}</button></form>;}

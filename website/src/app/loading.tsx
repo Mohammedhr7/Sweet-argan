@@ -1,0 +1,1 @@
+export default function Loading(){return <div className="container section" aria-busy="true" aria-label="Chargement"><div className="loading-grid">{[1,2,3,4].map(n=><div className="skeleton" key={n}/>)}</div></div>;}

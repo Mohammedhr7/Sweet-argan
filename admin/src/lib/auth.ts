@@ -1,0 +1,3 @@
+import 'server-only';
+import { redirect } from 'next/navigation';import { adminDb } from '@/lib/supabase/admin';import { sessionDb } from '@/lib/supabase/server';
+export async function requireAdmin(){const db=await sessionDb();if(!db)redirect('/login?reason=setup');const {data:{user},error}=await db.auth.getUser();if(error||!user)redirect('/login?reason=session');const profile=await adminDb().from('profiles').select('id,full_name,role').eq('id',user.id).maybeSingle();if(!profile.data||!['admin','super_admin'].includes(profile.data.role))redirect('/login?reason=forbidden');return {db,user,profile:profile.data};}

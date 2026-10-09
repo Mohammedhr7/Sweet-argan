@@ -1,0 +1,3 @@
+"use client";
+import Link from 'next/link';import { Plus } from 'lucide-react';import { useCart } from '@/features/cart/cart-provider';import type { Product } from '@/types/commerce';
+export function QuickAdd({product:p}:{product:Product}){const cart=useCart();if(p.product_variants.some(v=>v.is_active))return <Link className="quick-add" href={'/product/'+p.slug} aria-label={'Choisir '+p.name}><Plus size={18}/></Link>;return <button className="quick-add" disabled={p.track_inventory&&p.stock_quantity===0} aria-label={'Ajouter '+p.name} onClick={()=>cart.add({product_id:p.id,variant_id:null,name:p.name,slug:p.slug,image:p.product_images[0]?.image_url||'',price:p.price,quantity:1})}><Plus size={18}/></button>;}

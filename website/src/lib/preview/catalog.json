@@ -1,0 +1,438 @@
+{
+  "categories": [
+    {
+      "id": "10000000-0000-4000-8000-000000000001",
+      "name": "Soins du visage",
+      "slug": "soins-du-visage",
+      "description": "Crèmes précieuses et formules botaniques à base d'huile d'argan et de figue de barbarie.",
+      "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/soins-du-visage.jpg",
+      "is_active": true,
+      "sort_order": 1
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000002",
+      "name": "Soins du corps",
+      "slug": "soins-du-corps",
+      "description": "Déodorants solides naturels sans alcool et rituels de soin traditionnels.",
+      "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/soins-du-corps.jpg",
+      "is_active": true,
+      "sort_order": 2
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000003",
+      "name": "Savons",
+      "slug": "savons",
+      "description": "Savons artisanaux 100% naturels saponifiés pour un nettoyage détoxifiant et respectueux.",
+      "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/savons.jpg",
+      "is_active": true,
+      "sort_order": 3
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000004",
+      "name": "Masques & Argiles",
+      "slug": "masques-et-soins",
+      "description": "Argiles pures et gommages traditionnels marocains.",
+      "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/masques-et-soins.jpg",
+      "is_active": true,
+      "sort_order": 4
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000005",
+      "name": "Huiles & Solaires",
+      "slug": "huiles-et-solaires",
+      "description": "Huiles satinées et soins solaires bronzants à l'argan biologique.",
+      "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/huiles-et-solaires.jpg",
+      "is_active": true,
+      "sort_order": 5
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000006",
+      "name": "Terroir marocain",
+      "slug": "terroir-marocain",
+      "description": "Huile d'argan culinaire vierge et Amlou traditionnel aux amandes et miel pur.",
+      "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/terroir-marocain.jpg",
+      "is_active": true,
+      "sort_order": 6
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000007",
+      "name": "Coffrets",
+      "slug": "coffrets",
+      "description": "Packs et compositions rituels réunissant le meilleur de Sweet Argan.",
+      "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/coffrets.jpg",
+      "is_active": true,
+      "sort_order": 7
+    }
+  ],
+  "products": [
+    {
+      "id": "20000000-0000-4000-8000-000000000001",
+      "name": "Pack Timomouchin",
+      "slug": "pack-timomouchin",
+      "category_id": "10000000-0000-4000-8000-000000000007",
+      "categories": {
+        "id": "10000000-0000-4000-8000-000000000007",
+        "name": "Coffrets",
+        "slug": "coffrets",
+        "description": "Packs et compositions rituels réunissant le meilleur de Sweet Argan.",
+        "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/coffrets.jpg",
+        "is_active": true,
+        "sort_order": 7
+      },
+      "short_description": "Coffret signature prestige : Huile d'argan culinaire, Amlou aux amandes, Crème d'argan et Savon de charbon.",
+      "description": "Le Pack Timomouchin réunit le meilleur du terroir et de la beauté marocaine dans un coffret raffiné. Composé d'une bouteille d'huile d'argan alimentaire pure torréfiée, d'un bocal d'amlou d'amandes au miel, d'un pot de crème d'argan nutritive et d'un pain de savon de charbon détoxifiant. Présenté dans un élégant coffret kraft orné de son ruban olive Sweet Argan.",
+      "ingredients": "Huile d'argan vierge torréfiée, amandes douces, miel pur d'eucalyptus, crème visage argan, charbon végétal actif.",
+      "usage_instructions": "Un rituel complet alliant plaisir gustatif du terroir et soin naturel quotidien.",
+      "benefits": "Nutrition intense, détoxification cutanée et délices gastronomiques traditionnels.",
+      "sku": "SA-PACK-TIMO",
+      "price": 500,
+      "compare_at_price": 580,
+      "stock_quantity": 15,
+      "track_inventory": true,
+      "is_active": true,
+      "is_featured": true,
+      "is_best_seller": true,
+      "seo_title": "Pack Timomouchin · Coffret Terroir & Cosmétique Sweet Argan",
+      "seo_description": "Offrez le meilleur du Maroc avec le Pack Timomouchin de la coopérative Sweet Argan. Livraison gratuite partout au Maroc.",
+      "keywords": "coffret argan amlou miel pack timomouchin marrakech agadir",
+      "created_at": "2026-10-02T00:00:00Z",
+      "product_images": [
+        {
+          "id": "pimg-1",
+          "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/products/pack-timomouchin.jpg",
+          "alt_text": "Pack Timomouchin Sweet Argan",
+          "sort_order": 0
+        }
+      ],
+      "product_variants": []
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000002",
+      "name": "Crème d'Argan",
+      "slug": "creme-d-argan",
+      "category_id": "10000000-0000-4000-8000-000000000001",
+      "categories": {
+        "id": "10000000-0000-4000-8000-000000000001",
+        "name": "Soins du visage",
+        "slug": "soins-du-visage",
+        "description": "Crèmes précieuses et formules botaniques à base d'huile d'argan et de figue de barbarie.",
+        "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/soins-du-visage.jpg",
+        "is_active": true,
+        "sort_order": 1
+      },
+      "short_description": "Crème visage nutritive et adoucissante enrichie à l'huile d'argan pure de la coopérative.",
+      "description": "Formulée à partir de l'huile d'argan biologique de notre coopérative, la Crème d'Argan apporte douceur et souplesse à l'épiderme. Sa texture onctueuse pénètre facilement pour nourrir en profondeur et préserver le confort naturel de la peau au quotidien.",
+      "ingredients": "Huile d'argan biologique pure (Argania Spinosa), cire végétale naturelle, extraits végétaux adoucissants.",
+      "usage_instructions": "Appliquer matin et soir sur le visage et le cou parfaitement nettoyés en massant délicatement du centre vers l'extérieur.",
+      "benefits": "Hydratation durable, régénération cellulaire et protection contre le dessèchement.",
+      "sku": "SA-CRM-ARG-50",
+      "price": 120,
+      "compare_at_price": null,
+      "stock_quantity": 25,
+      "track_inventory": true,
+      "is_active": true,
+      "is_featured": true,
+      "is_best_seller": true,
+      "seo_title": "Crème d'Argan Visage · Sweet Argan Maroc",
+      "seo_description": "Découvrez la Crème d'Argan hydratante et nourrissante de la coopérative Sweet Argan. Soin 100% naturel.",
+      "keywords": "creme argan visage hydratante bio marocaine",
+      "created_at": "2026-10-02T00:00:00Z",
+      "product_images": [
+        {
+          "id": "pimg-2",
+          "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/products/creme-argan.jpg",
+          "alt_text": "Crème d'Argan Sweet Argan",
+          "sort_order": 0
+        }
+      ],
+      "product_variants": []
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000003",
+      "name": "Crème de Figue de Barbarie",
+      "slug": "creme-de-figue-de-barbarie",
+      "category_id": "10000000-0000-4000-8000-000000000001",
+      "categories": {
+        "id": "10000000-0000-4000-8000-000000000001",
+        "name": "Soins du visage",
+        "slug": "soins-du-visage",
+        "description": "Crèmes précieuses et formules botaniques à base d'huile d'argan et de figue de barbarie.",
+        "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/soins-du-visage.jpg",
+        "is_active": true,
+        "sort_order": 1
+      },
+      "short_description": "Soin visage revitalisant et protecteur aux extraits précieux de graines de figue de barbarie.",
+      "description": "La Crème de Figue de Barbarie Sweet Argan puise ses vertus dans les graines du figuier de Barbarie, trésor anti-âge des terres arides marocaines. Idéale pour tous types de peaux, elle participe à lisser les ridules et protéger la peau contre la fatigue cutanée.",
+      "ingredients": "Huile de pépins de figue de barbarie (Opuntia Ficus-Indica), huile d'argan, eau florale de rose.",
+      "usage_instructions": "Prélever une noisette et faire pénétrer par effleurements légers sur l'ensemble du visage.",
+      "benefits": "Effet tenseur naturel, éclat retrouvé et réduction des signes de fatigue.",
+      "sku": "SA-CRM-FIG-50",
+      "price": 150,
+      "compare_at_price": 180,
+      "stock_quantity": 20,
+      "track_inventory": true,
+      "is_active": true,
+      "is_featured": true,
+      "is_best_seller": false,
+      "seo_title": "Crème de Figue de Barbarie · Anti-âge naturel Sweet Argan",
+      "seo_description": "Soin raffermissant à l'huile de figue de barbarie et argan. Fabrication coopérative marocaine.",
+      "keywords": "creme figue barbarie anti age tenseur bio maroc",
+      "created_at": "2026-10-02T00:00:00Z",
+      "product_images": [
+        {
+          "id": "pimg-3",
+          "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/products/creme-figue-barbarie.jpg",
+          "alt_text": "Crème de Figue de Barbarie Sweet Argan",
+          "sort_order": 0
+        }
+      ],
+      "product_variants": []
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000004",
+      "name": "Crème Royale OUD",
+      "slug": "creme-royale-oud",
+      "category_id": "10000000-0000-4000-8000-000000000001",
+      "categories": {
+        "id": "10000000-0000-4000-8000-000000000001",
+        "name": "Soins du visage",
+        "slug": "soins-du-visage",
+        "description": "Crèmes précieuses et formules botaniques à base d'huile d'argan et de figue de barbarie.",
+        "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/soins-du-visage.jpg",
+        "is_active": true,
+        "sort_order": 1
+      },
+      "short_description": "Soin précieux d'exception infusé au parfum envoûtant de bois d'oud oriental.",
+      "description": "Véritable alliance entre la noblesse de l'oud et la richesse de l'argan marocain, la Crème Royale OUD offre une expérience sensorielle luxueuse. Sa formule généreuse sublime la texture de la peau en laissant un sillage boisé captivant.",
+      "ingredients": "Essence de bois d'oud naturel, huile d'argan pure, beurre de karité, vitamine E végétale.",
+      "usage_instructions": "À appliquer le soir en soin réconfortant ou le matin pour un sillage raffiné tout au long de la journée.",
+      "benefits": "Peau veloutée, parfum envoûtant et sensation de confort royale.",
+      "sku": "SA-CRM-OUD-50",
+      "price": 180,
+      "compare_at_price": null,
+      "stock_quantity": 18,
+      "track_inventory": true,
+      "is_active": true,
+      "is_featured": true,
+      "is_best_seller": true,
+      "seo_title": "Crème Royale OUD · Soin Prestige Sweet Argan",
+      "seo_description": "L'élégance de l'oud oriental et de l'argan réunis dans un soin visage d'exception.",
+      "keywords": "creme oud royal luxe argan cosmetique maroc",
+      "created_at": "2026-10-02T00:00:00Z",
+      "product_images": [
+        {
+          "id": "pimg-4",
+          "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/products/creme-royale-oud.jpg",
+          "alt_text": "Crème Royale OUD Sweet Argan",
+          "sort_order": 0
+        }
+      ],
+      "product_variants": []
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000005",
+      "name": "Savon de Charbon",
+      "slug": "savon-de-charbon",
+      "category_id": "10000000-0000-4000-8000-000000000003",
+      "categories": {
+        "id": "10000000-0000-4000-8000-000000000003",
+        "name": "Savons",
+        "slug": "savons",
+        "description": "Savons artisanaux 100% naturels saponifiés pour un nettoyage détoxifiant et respectueux.",
+        "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/savons.jpg",
+        "is_active": true,
+        "sort_order": 3
+      },
+      "short_description": "Pain de savon détoxifiant 100% naturel au charbon végétal actif et argan.",
+      "description": "Le Savon de Charbon Sweet Argan nettoie les impuretés en profondeur sans assécher. Formulé pour absorber l'excès de sébum et purifier les pores, il est particulièrement recommandé pour les peaux mixtes à grasses en quête de netteté naturelle.",
+      "ingredients": "Charbon végétal actif, huiles saponifiées végétales, huile d'argan cosmétique pure.",
+      "usage_instructions": "Faire mousser sur peau humide pour le visage ou le corps, masser délicatement en mouvements circulaires puis rincer abondamment.",
+      "benefits": "Purifie le teint, désincruste les pores et équilibre les zones à tendance grasse.",
+      "sku": "SA-SAV-CHB-100",
+      "price": 45,
+      "compare_at_price": null,
+      "stock_quantity": 40,
+      "track_inventory": true,
+      "is_active": true,
+      "is_featured": false,
+      "is_best_seller": true,
+      "seo_title": "Savon de Charbon Actif · Détoxifiant Naturel Sweet Argan",
+      "seo_description": "Savon artisanal au charbon actif végétal. Purifiant et régulateur pour peaux mixtes et grasses.",
+      "keywords": "savon charbon actif argan naturel maroc",
+      "created_at": "2026-10-02T00:00:00Z",
+      "product_images": [
+        {
+          "id": "pimg-5",
+          "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/products/savon-charbon.jpg",
+          "alt_text": "Savon de Charbon Sweet Argan",
+          "sort_order": 0
+        }
+      ],
+      "product_variants": []
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000006",
+      "name": "Déodorant Roll-on Musc",
+      "slug": "deodorant-musc",
+      "category_id": "10000000-0000-4000-8000-000000000002",
+      "categories": {
+        "id": "10000000-0000-4000-8000-000000000002",
+        "name": "Soins du corps",
+        "slug": "soins-du-corps",
+        "description": "Déodorants solides naturels sans alcool et rituels de soin traditionnels.",
+        "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/soins-du-corps.jpg",
+        "is_active": true,
+        "sort_order": 2
+      },
+      "short_description": "Déodorant bille 48h sans alcool au parfum frais et poudré de musc blanc.",
+      "description": "Spécialement développé pour le respect des peaux sensibles, le Déodorant Musc Sweet Argan assure une protection naturelle contre la transpiration jusqu'à 48 heures. Sans alcool et enrichi en agents adoucissants, il procure une sensation de fraîcheur continue.",
+      "ingredients": "Actifs minéraux anti-transpirants doux, extrait de musc délicat, huile d'argan adoucissante.",
+      "usage_instructions": "Appliquer quotidiennement sur aisselles propres et sèches. Ne tâche pas les vêtements.",
+      "benefits": "Protection 48h efficace, formule hypoallergénique sans alcool respectueuse de la peau.",
+      "sku": "SA-DEO-MSC-50",
+      "price": 65,
+      "compare_at_price": null,
+      "stock_quantity": 30,
+      "track_inventory": true,
+      "is_active": true,
+      "is_featured": false,
+      "is_best_seller": false,
+      "seo_title": "Déodorant Naturel Musc 48h · Sweet Argan",
+      "seo_description": "Déodorant bille sans alcool au musc naturel pour peaux sensibles. Fraîcheur et confort 48h.",
+      "keywords": "deodorant musc sans alcool peaux sensibles roll on maroc",
+      "created_at": "2026-10-02T00:00:00Z",
+      "product_images": [
+        {
+          "id": "pimg-6",
+          "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/products/deodorant-musc.jpg",
+          "alt_text": "Déodorant Roll-on Musc Sweet Argan",
+          "sort_order": 0
+        }
+      ],
+      "product_variants": []
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000007",
+      "name": "Huile de Bronzage",
+      "slug": "huile-de-bronzage",
+      "category_id": "10000000-0000-4000-8000-000000000005",
+      "categories": {
+        "id": "10000000-0000-4000-8000-000000000005",
+        "name": "Huiles & Solaires",
+        "slug": "huiles-et-solaires",
+        "description": "Huiles satinées et soins solaires bronzants à l'argan biologique.",
+        "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/huiles-et-solaires.jpg",
+        "is_active": true,
+        "sort_order": 5
+      },
+      "short_description": "Huile satinée bronzante 100ml enrichie à l'argan biologique pour un hâle doré sublime.",
+      "description": "L'Huile de Bronzage Sweet Argan favorise un bronzage lumineux, harmonieux et longue durée tout en nourrissant intensément l'épiderme sous le soleil. Son fini sec et satiné ne colle pas et enveloppe le corps d'une délicate touche dorée.",
+      "ingredients": "Huile d'argan bio, huile de carotte, huile de coco vierge, vitamine E antioxydante.",
+      "usage_instructions": "Vaporiser généreusement sur le corps avant et pendant l'exposition solaire. Renouveler après la baignade.",
+      "benefits": "Active et sublime le bronzage, nourrit intensément et procure un fini satiné soyeux.",
+      "sku": "SA-HUL-BRZ-100",
+      "price": 130,
+      "compare_at_price": null,
+      "stock_quantity": 25,
+      "track_inventory": true,
+      "is_active": true,
+      "is_featured": true,
+      "is_best_seller": false,
+      "seo_title": "Huile de Bronzage Satinée à l'Argan · Sweet Argan",
+      "seo_description": "Sublimez votre hâle avec l'huile de bronzage à l'argan bio de Sweet Argan. Éclat doré naturel.",
+      "keywords": "huile bronzage argan carotte solaire marocaine",
+      "created_at": "2026-10-02T00:00:00Z",
+      "product_images": [
+        {
+          "id": "pimg-7",
+          "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/products/huile-bronzage.jpg",
+          "alt_text": "Huile de Bronzage Sweet Argan",
+          "sort_order": 0
+        }
+      ],
+      "product_variants": []
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000008",
+      "name": "Argile Verte Naturelle",
+      "slug": "argile-verte-naturelle",
+      "category_id": "10000000-0000-4000-8000-000000000004",
+      "categories": {
+        "id": "10000000-0000-4000-8000-000000000004",
+        "name": "Masques & Argiles",
+        "slug": "masques-et-soins",
+        "description": "Argiles pures et gommages traditionnels marocains.",
+        "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/masques-et-soins.jpg",
+        "is_active": true,
+        "sort_order": 4
+      },
+      "short_description": "Poudre d'argile verte 100% pure pour masque visage purifiant et équilibrant.",
+      "description": "Extraite des carrières naturelles marocaines, l'Argile Verte Sweet Argan est le soin par excellence des peaux mixtes et grasses. Elle resserre les pores, absorbe le sébum et redonne fraîcheur et pureté au teint.",
+      "ingredients": "100% Argile verte montmorillonite naturelle séchée au soleil.",
+      "usage_instructions": "Mélanger avec un peu d'eau minérale ou d'eau de rose jusqu'à obtention d'une pâte onctueuse. Laisser poser 10 minutes sans laisser sécher complètement, puis rincer.",
+      "benefits": "Détoxification intense, matification et affinement du grain de peau.",
+      "sku": "SA-ARG-VRT-100",
+      "price": 55,
+      "compare_at_price": null,
+      "stock_quantity": 30,
+      "track_inventory": true,
+      "is_active": true,
+      "is_featured": false,
+      "is_best_seller": false,
+      "seo_title": "Argile Verte Pure du Maroc · Sweet Argan",
+      "seo_description": "Poudre d'argile verte séchée au soleil pour masque détoxifiant visage et corps.",
+      "keywords": "argile verte masque purifiant peaux grasses maroc",
+      "created_at": "2026-10-02T00:00:00Z",
+      "product_images": [
+        {
+          "id": "pimg-8",
+          "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/products/argile-verte.jpg",
+          "alt_text": "Argile Verte Naturelle Sweet Argan",
+          "sort_order": 0
+        }
+      ],
+      "product_variants": []
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000009",
+      "name": "Amlou Artisanal aux Amandes & Miel",
+      "slug": "amlou-artisanal-amandes-miel",
+      "category_id": "10000000-0000-4000-8000-000000000006",
+      "categories": {
+        "id": "10000000-0000-4000-8000-000000000006",
+        "name": "Terroir marocain",
+        "slug": "terroir-marocain",
+        "description": "Huile d'argan culinaire vierge et Amlou traditionnel aux amandes et miel pur.",
+        "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/categories/terroir-marocain.jpg",
+        "is_active": true,
+        "sort_order": 6
+      },
+      "short_description": "Pâte à tartiner traditionnelle berbère aux amandes torréfiées, miel pur et huile d'argan.",
+      "description": "Préparé selon la recette ancestrale du Souss, notre Amlou Sweet Argan réunit des amandes douces finement moulues à la meule de pierre, du miel pur d'eucalyptus et notre huile d'argan torréfiée. Un trésor gustatif riche en énergie et en goût.",
+      "ingredients": "Amandes douces torréfiées, huile d'argan alimentaire vierge, miel pur naturel d'eucalyptus.",
+      "usage_instructions": "À déguster au petit-déjeuner sur du pain chaud marocain, des crêpes msemen ou baghrir, ou à la cuillère.",
+      "benefits": "Source naturelle d'énergie, riche en vitamine E, acides gras essentiels et antioxydants.",
+      "sku": "SA-AML-AMD-250",
+      "price": 110,
+      "compare_at_price": null,
+      "stock_quantity": 25,
+      "track_inventory": true,
+      "is_active": true,
+      "is_featured": false,
+      "is_best_seller": true,
+      "seo_title": "Amlou Artisanal aux Amandes et Miel · Sweet Argan",
+      "seo_description": "Le véritable Amlou marocain préparé à l'argan alimentaire, amandes grillées et miel pur.",
+      "keywords": "amlou amandes miel huile argan gastronomie marocaine",
+      "created_at": "2026-10-02T00:00:00Z",
+      "product_images": [
+        {
+          "id": "pimg-9",
+          "image_url": "https://wpcqqpzkavciiugwvqsn.supabase.co/storage/v1/object/public/products/amlou-amandes-miel.jpg",
+          "alt_text": "Amlou Artisanal aux Amandes & Miel Sweet Argan",
+          "sort_order": 0
+        }
+      ],
+      "product_variants": []
+    }
+  ]
+}

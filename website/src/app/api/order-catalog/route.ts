@@ -1,0 +1,2 @@
+import {getProducts} from '@/services/catalog';
+export async function GET(req:Request){const q=new URL(req.url).searchParams.get('q')||'';const {products}=await getProducts({q});return Response.json(products.map(p=>({id:p.id,name:p.name,price:p.price,image:p.product_images[0]?.image_url||'',variants:p.product_variants.filter(v=>v.is_active).map(v=>({id:v.id,name:v.name,price:v.price}))})),{headers:{'Cache-Control':'no-store'}});}

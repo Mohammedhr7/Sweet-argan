@@ -1,0 +1,1 @@
+import Link from 'next/link';export default function NotFound(){return <main className="empty-state"><h1>Page introuvable.</h1><Link className="button" href="/">Revenir au tableau de bord</Link></main>;}
