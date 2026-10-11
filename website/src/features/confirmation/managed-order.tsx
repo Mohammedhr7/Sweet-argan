@@ -6,33 +6,25 @@ import type { ManagedOrder } from '@/types/order-management';
 import { StorefrontImage } from '@/components/storefront-image';
 import { money } from '@/utils/money';
 import { formatRemainingTime } from '@/lib/order-rules';
-
-const confirmationLabels: Record<string, string> = {
-  pending: 'À confirmer',
-  confirmed: 'Confirmée',
-  needs_review: 'À examiner',
-  rejected: 'Refusée',
-  expired: 'Expirée'
-};
-
-const fulfillmentLabels: Record<string, string> = {
-  new: 'Commande reçue',
-  processing: 'En préparation',
-  ready: 'Prête pour expédition',
-  shipped: 'Expédiée',
-  delivered: 'Livrée',
-  cancelled: 'Annulée',
-  returned: 'Retournée'
-};
+import { useLanguage } from '@/features/i18n/language-context';
 
 export function OrderSummary({ order: o }: { order: ManagedOrder }) {
+  const { t, locale } = useLanguage();
+  const m = t.order_management;
+  const dateLocale = locale === 'ar' ? 'ar-MA' : locale === 'en' ? 'en-US' : 'fr-MA';
+
   return (
     <section className="panel" aria-labelledby="summary-title">
       <h2 id="summary-title" style={{ fontSize: '24px', marginBottom: '8px' }}>
-        Détails de la commande
+        {m.order_details_title}
       </h2>
       <p style={{ color: 'var(--muted)', fontSize: '13px', marginBottom: '20px' }}>
-        {o.customer_name} · Commande passée le {new Date(o.created_at).toLocaleDateString('fr-MA', { day: 'numeric', month: 'long', year: 'numeric' })}
+        {o.customer_name} · {m.order_placed_on}{' '}
+        {new Date(o.created_at).toLocaleDateString(dateLocale, {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        })}
       </p>
 
       <div style={{ marginBottom: '20px' }}>
@@ -48,7 +40,7 @@ export function OrderSummary({ order: o }: { order: ManagedOrder }) {
             <div>
               <strong style={{ display: 'block', fontSize: '15px' }}>{i.product_name}</strong>
               <p style={{ margin: '4px 0', color: 'var(--muted)', fontSize: '13px' }}>
-                Quantité : {i.quantity} × {money(i.unit_price)}
+                {m.quantity_label} {i.quantity} × {money(i.unit_price)}
               </p>
             </div>
             <strong style={{ fontSize: '15px' }}>{money(i.line_total)}</strong>
@@ -58,34 +50,34 @@ export function OrderSummary({ order: o }: { order: ManagedOrder }) {
 
       <div style={{ borderTop: '1px solid var(--line)', paddingTop: '16px', marginBottom: '24px' }}>
         <div className="summary-line">
-          <span>Sous-total</span>
+          <span>{m.subtotal}</span>
           <strong>{money(o.subtotal)}</strong>
         </div>
         <div className="summary-line">
-          <span>Livraison</span>
-          <strong>{o.shipping_amount === 0 ? 'Gratuite' : money(o.shipping_amount)}</strong>
+          <span>{m.shipping}</span>
+          <strong>{o.shipping_amount === 0 ? m.free_shipping : money(o.shipping_amount)}</strong>
         </div>
         {o.discount_amount > 0 && (
           <div className="summary-line" style={{ color: '#15803d' }}>
-            <span>Remise</span>
+            <span>{m.discount}</span>
             <strong>− {money(o.discount_amount)}</strong>
           </div>
         )}
         <div className="summary-line summary-total">
-          <span>Total TTC</span>
+          <span>{m.total_with_tax}</span>
           <strong style={{ color: 'var(--olive)', fontSize: '22px' }}>{money(o.total)}</strong>
         </div>
       </div>
 
       <div style={{ borderTop: '1px solid var(--line)', paddingTop: '16px' }}>
-        <h3 style={{ fontSize: '17px', marginBottom: '10px' }}>Adresse de livraison</h3>
+        <h3 style={{ fontSize: '17px', marginBottom: '10px' }}>{m.delivery_address_title}</h3>
         <p style={{ margin: 0, fontSize: '14px', lineHeight: '1.6' }}>
-          <strong>Ville :</strong> {o.shipping_city}<br />
-          <strong>Adresse :</strong> {o.shipping_address}
+          <strong>{m.city_label}</strong> {o.shipping_city}<br />
+          <strong>{m.address_label}</strong> {o.shipping_address}
         </p>
         {o.shipping_notes && (
           <p style={{ marginTop: '10px', fontSize: '13px', fontStyle: 'italic', color: 'var(--muted)' }}>
-            <strong>Note de livraison :</strong> {o.shipping_notes}
+            <strong>{m.notes_label}</strong> {o.shipping_notes}
           </p>
         )}
       </div>
@@ -94,20 +86,23 @@ export function OrderSummary({ order: o }: { order: ManagedOrder }) {
 }
 
 export function OrderTimeline({ order: o }: { order: ManagedOrder }) {
+  const { t, locale } = useLanguage();
+  const m = t.order_management;
   const isCancelled = o.fulfillment_status === 'cancelled';
+  const dateLocale = locale === 'ar' ? 'ar-MA' : locale === 'en' ? 'en-US' : 'fr-MA';
 
   const steps = isCancelled
     ? [
-        { key: 'new', label: 'Commande reçue' },
-        { key: 'cancelled', label: 'Annulée' }
+        { key: 'new', label: m.fulfillment_statuses.new || 'Commande reçue' },
+        { key: 'cancelled', label: m.fulfillment_statuses.cancelled || 'Annulée' }
       ]
     : [
-        { key: 'new', label: 'Commande reçue' },
-        { key: 'confirmed', label: 'Confirmée' },
-        { key: 'processing', label: 'En préparation' },
-        { key: 'ready', label: 'Prête' },
-        { key: 'shipped', label: 'Expédiée' },
-        { key: 'delivered', label: 'Livrée' }
+        { key: 'new', label: m.fulfillment_statuses.new || 'Commande reçue' },
+        { key: 'confirmed', label: m.confirmation_statuses.confirmed || 'Confirmée' },
+        { key: 'processing', label: m.fulfillment_statuses.processing || 'En préparation' },
+        { key: 'ready', label: m.fulfillment_statuses.ready || 'Prête' },
+        { key: 'shipped', label: m.fulfillment_statuses.shipped || 'Expédiée' },
+        { key: 'delivered', label: m.fulfillment_statuses.delivered || 'Livrée' }
       ];
 
   const getStepStatus = (key: string) => {
@@ -139,11 +134,11 @@ export function OrderTimeline({ order: o }: { order: ManagedOrder }) {
 
     const rank = orderRank[key] || 0;
     if (currentFulfillmentRank > rank) {
-      const match = o.timeline.find((t) => t.new_status === key);
+      const match = o.timeline.find((item) => item.new_status === key);
       return { state: 'completed', date: match?.created_at };
     }
     if (currentFulfillmentRank === rank && isConfirmed) {
-      const match = o.timeline.find((t) => t.new_status === key);
+      const match = o.timeline.find((item) => item.new_status === key);
       return { state: 'active', date: match?.created_at };
     }
     return { state: 'pending', date: null };
@@ -152,7 +147,7 @@ export function OrderTimeline({ order: o }: { order: ManagedOrder }) {
   return (
     <section className="panel timeline-container" aria-labelledby="timeline-title">
       <h2 id="timeline-title" style={{ fontSize: '22px', marginBottom: '20px' }}>
-        Suivi et étapes de votre commande
+        {m.timeline_title}
       </h2>
       <ol className="timeline-list">
         {steps.map((s, idx) => {
@@ -166,7 +161,7 @@ export function OrderTimeline({ order: o }: { order: ManagedOrder }) {
                 <strong>{s.label}</strong>
                 {date && (
                   <span>
-                    {new Date(date).toLocaleString('fr-MA', {
+                    {new Date(date).toLocaleString(dateLocale, {
                       day: 'numeric',
                       month: 'short',
                       hour: '2-digit',
@@ -174,7 +169,7 @@ export function OrderTimeline({ order: o }: { order: ManagedOrder }) {
                     })}
                   </span>
                 )}
-                {!date && state === 'active' && <span>En cours…</span>}
+                {!date && state === 'active' && <span>{m.in_progress}</span>}
               </div>
             </li>
           );
@@ -193,6 +188,10 @@ export function ManagedOrderPanel({
   contact?: string;
   initialToken?: string;
 }) {
+  const { t, locale, dir } = useLanguage();
+  const m = t.order_management;
+  const dateLocale = locale === 'ar' ? 'ar-MA' : locale === 'en' ? 'en-US' : 'fr-MA';
+
   const [o, setOrder] = useState(order);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -206,8 +205,8 @@ export function ManagedOrderPanel({
       const elapsed = Math.floor((performance.now() - start) / 1000);
       setRemaining(Math.max(0, o.remaining_seconds - elapsed));
     };
-    const t = setInterval(tick, 1000);
-    return () => clearInterval(t);
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
   }, [o.remaining_seconds, o.server_now]);
 
   async function act(action: 'confirm' | 'cancel', reason = '') {
@@ -233,7 +232,13 @@ export function ManagedOrderPanel({
       setRemaining(data.remaining_seconds);
       dialog.current?.close();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Connexion interrompue. Réessayez.');
+      setError(
+        e instanceof Error
+          ? e.message
+          : locale === 'ar'
+          ? 'تعذر الاتصال بالخادم. يرجى إعادة المحاولة.'
+          : 'Connexion interrompue. Réessayez.'
+      );
     } finally {
       setBusy(false);
     }
@@ -245,29 +250,34 @@ export function ManagedOrderPanel({
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);
     } catch {
-      setError('Sélectionnez le numéro pour le copier manuellement.');
+      setError(
+        locale === 'ar'
+          ? 'يرجى تحديد رقم الطلب ونسخه يدوياً.'
+          : 'Sélectionnez le numéro pour le copier manuellement.'
+      );
     }
   }
 
   const isCancelled = o.fulfillment_status === 'cancelled';
   const isConfirmed = o.confirmation_status === 'confirmed' && !isCancelled;
-  const isPending = o.confirmation_status === 'pending' && !isCancelled;
 
-  const editUrl = `/order/${o.public_order_code}/edit${initialToken ? '?token=' + encodeURIComponent(initialToken) : ''}`;
+  const editUrl = `/order/${o.public_order_code}/edit${
+    initialToken ? '?token=' + encodeURIComponent(initialToken) : ''
+  }`;
 
   return (
-    <div className="managed-order" lang="fr">
-      <div className="eyebrow">SWEET ARGAN · SUIVI DE COMMANDE</div>
+    <div className="managed-order" lang={locale} dir={dir}>
+      <div className="eyebrow">{m.eyebrow}</div>
 
       {/* TOP DECISION / STATUS HERO */}
       {isCancelled ? (
         <div className="order-hero-box cancelled">
-          <h1 style={{ color: '#991b1b' }}>Commande annulée</h1>
+          <h1 style={{ color: '#991b1b' }}>{m.cancelled_title}</h1>
           <div className="order-code-badge">{o.public_order_code}</div>
           <p style={{ margin: '12px 0', fontSize: '15px' }}>
-            Cette commande a été annulée le{' '}
+            {m.cancelled_date_prefix}
             {o.cancelled_at &&
-              new Date(o.cancelled_at).toLocaleString('fr-MA', {
+              new Date(o.cancelled_at).toLocaleString(dateLocale, {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
@@ -278,35 +288,42 @@ export function ManagedOrderPanel({
           </p>
           {o.cancellation_reason && (
             <p style={{ color: 'var(--muted)', fontSize: '14px', marginBottom: '16px' }}>
-              <strong>Motif :</strong> {o.cancellation_reason}
+              <strong>{m.cancelled_reason_label}</strong> {o.cancellation_reason}
             </p>
           )}
           <p style={{ color: 'var(--muted)', fontSize: '13px', marginBottom: '24px' }}>
-            Le stock réservé pour vos articles a été immédiatement libéré.
+            {m.cancelled_stock_freed}
           </p>
           <div className="managed-actions">
             <Link className="button" href="/shop">
-              Retourner à la boutique
+              {m.back_to_shop}
             </Link>
           </div>
         </div>
       ) : isConfirmed ? (
         <div className="order-hero-box confirmed">
-          <h1 style={{ color: 'var(--olive)' }}>Commande confirmée 🎉</h1>
-          <p style={{ fontSize: '15px', color: 'var(--ink)' }}>Numéro de commande :</p>
+          <h1 style={{ color: 'var(--olive)' }}>{m.confirmed_title}</h1>
+          <p style={{ fontSize: '15px', color: 'var(--ink)' }}>{m.order_number_label}</p>
           <div className="order-code-badge">{o.public_order_code}</div>
 
           <div className="managed-actions">
             <button type="button" className="button secondary" onClick={copyOrderCode}>
-              {copied ? '✓ Numéro copié !' : 'Copier le numéro'}
+              {copied ? m.copied_btn : m.copy_number_btn}
             </button>
             <Link className="button secondary" href="/order-tracking">
-              Suivre ma commande
+              {m.track_order_btn}
             </Link>
           </div>
 
-          <p style={{ fontSize: '13px', color: 'var(--muted)', maxWidth: '520px', margin: '14px auto 0' }}>
-            Conservez ce numéro pour suivre votre commande. Les modifications sont possibles pendant 24 heures après confirmation, tant que sa préparation n’a pas commencé.
+          <p
+            style={{
+              fontSize: '13px',
+              color: 'var(--muted)',
+              maxWidth: '520px',
+              margin: '14px auto 0'
+            }}
+          >
+            {m.confirmed_notice}
           </p>
 
           {/* EDITABLE NOTICE & COUNTDOWN */}
@@ -314,8 +331,7 @@ export function ManagedOrderPanel({
             <div className="countdown-box" role="status">
               <span>⏱️</span>
               <span>
-                Vous pouvez encore modifier ou annuler cette commande pendant{' '}
-                <strong>{formatRemainingTime(remaining)}</strong>, tant que sa préparation n’a pas commencé.
+                {m.countdown_text.replace('{time}', formatRemainingTime(remaining, locale))}
               </span>
             </div>
           )}
@@ -324,7 +340,7 @@ export function ManagedOrderPanel({
             <div className="managed-actions" style={{ marginTop: '16px' }}>
               {o.can_modify && (
                 <Link className="button secondary" href={editUrl}>
-                  ✏️ Modifier la commande
+                  {m.btn_modify}
                 </Link>
               )}
               {o.can_cancel && (
@@ -334,7 +350,7 @@ export function ManagedOrderPanel({
                   disabled={busy}
                   onClick={() => dialog.current?.showModal()}
                 >
-                  ❌ Annuler la commande
+                  {m.btn_cancel}
                 </button>
               )}
             </div>
@@ -342,24 +358,35 @@ export function ManagedOrderPanel({
 
           {!o.can_modify && !o.can_cancel && (
             <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '20px' }}>
-              🔒 Cette commande ne peut plus être modifiée ou annulée en ligne (la préparation a commencé ou le délai de 24 h est écoulé).{' '}
-              {contact && <Link href={contact} style={{ textDecoration: 'underline' }}>Contacter Sweet Argan</Link>}
+              {m.order_locked_notice}{' '}
+              {contact && (
+                <Link href={contact} style={{ textDecoration: 'underline' }}>
+                  {m.contact_support}
+                </Link>
+              )}
             </p>
           )}
         </div>
       ) : (
         /* PENDING CONFIRMATION STATE */
         <div className="order-prompt-box">
-          <h1 className="order-prompt-title">Souhaitez-vous confirmer votre commande ?</h1>
+          <h1 className="order-prompt-title">{m.prompt_title}</h1>
           <div className="order-code-badge">{o.public_order_code}</div>
 
           {o.last_modified_at ? (
-            <p className="notice" style={{ margin: '14px 0', textAlign: 'left' }}>
-              ⚠️ Votre commande a été modifiée. Veuillez confirmer la nouvelle version pour lancer sa prise en charge.
+            <p className="notice" style={{ margin: '14px 0', textAlign: dir === 'rtl' ? 'right' : 'left' }}>
+              {m.prompt_modified_notice}
             </p>
           ) : (
-            <p style={{ color: 'var(--muted)', fontSize: '14px', maxWidth: '540px', margin: '10px auto 20px' }}>
-              Vérifiez les informations ci-dessous puis confirmez votre commande. Vous disposerez ensuite de 24 heures pour la modifier ou l’annuler en ligne tant que sa préparation n’a pas commencé.
+            <p
+              style={{
+                color: 'var(--muted)',
+                fontSize: '14px',
+                maxWidth: '540px',
+                margin: '10px auto 20px'
+              }}
+            >
+              {m.prompt_desc}
             </p>
           )}
 
@@ -372,12 +399,12 @@ export function ManagedOrderPanel({
                 disabled={busy}
                 onClick={() => act('confirm')}
               >
-                {busy ? 'Enregistrement…' : '✅ Confirmer la commande'}
+                {busy ? m.btn_confirming : m.btn_confirm}
               </button>
             )}
             {o.can_modify && (
               <Link className="button secondary" href={editUrl}>
-                ✏️ Modifier la commande
+                {m.btn_modify}
               </Link>
             )}
             {o.can_cancel && (
@@ -387,7 +414,7 @@ export function ManagedOrderPanel({
                 disabled={busy}
                 onClick={() => dialog.current?.showModal()}
               >
-                ❌ Annuler la commande
+                {m.btn_cancel}
               </button>
             )}
           </div>
@@ -397,18 +424,29 @@ export function ManagedOrderPanel({
       {/* STATUS BADGES */}
       <div className="order-status-badges" style={{ marginBottom: '24px' }}>
         <span className={`order-badge ${o.confirmation_status}`}>
-          Confirmation : {confirmationLabels[o.confirmation_status] || o.confirmation_status}
+          {m.status_confirmation_label} : {m.confirmation_statuses[o.confirmation_status] || o.confirmation_status}
         </span>
         <span className={`order-badge ${o.fulfillment_status}`}>
-          Livraison : {fulfillmentLabels[o.fulfillment_status] || o.fulfillment_status}
+          {m.status_fulfillment_label} : {m.fulfillment_statuses[o.fulfillment_status] || o.fulfillment_status}
         </span>
       </div>
 
       {error && (
         <div className="error" role="alert" style={{ marginBottom: '20px' }}>
           {error}{' '}
-          <button type="button" onClick={() => location.reload()} style={{ marginLeft: '10px', textDecoration: 'underline', border: 0, background: 'none' }}>
-            Actualiser
+          <button
+            type="button"
+            onClick={() => location.reload()}
+            style={{
+              marginLeft: dir === 'rtl' ? 0 : '10px',
+              marginRight: dir === 'rtl' ? '10px' : 0,
+              textDecoration: 'underline',
+              border: 0,
+              background: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            {locale === 'ar' ? 'تحديث' : 'Actualiser'}
           </button>
         </div>
       )}
@@ -420,7 +458,7 @@ export function ManagedOrderPanel({
       <OrderTimeline order={o} />
 
       {/* CANCELLATION DIALOG */}
-      <dialog ref={dialog} className="order-dialog">
+      <dialog ref={dialog} className="order-dialog" dir={dir}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -428,22 +466,33 @@ export function ManagedOrderPanel({
             void act('cancel', reason);
           }}
         >
-          <h2 style={{ fontSize: '22px', marginBottom: '12px' }}>Annuler cette commande ?</h2>
-          <p style={{ fontSize: '14px', lineHeight: '1.6', color: 'var(--muted)', marginBottom: '18px' }}>
-            Êtes-vous sûr de vouloir annuler cette commande ? Le stock réservé pour vos articles sera immédiatement libéré.
+          <h2 style={{ fontSize: '22px', marginBottom: '12px' }}>{m.cancel_modal_title}</h2>
+          <p
+            style={{
+              fontSize: '14px',
+              lineHeight: '1.6',
+              color: 'var(--muted)',
+              marginBottom: '18px'
+            }}
+          >
+            {m.cancel_modal_desc}
           </p>
 
-          <label htmlFor="cancel-reason">Motif (facultatif)</label>
+          <label htmlFor="cancel-reason">{m.cancel_modal_reason_label}</label>
           <select name="reason" id="cancel-reason" defaultValue="">
-            <option value="">Choisir un motif (facultatif)</option>
-            {['Je ne souhaite plus commander', 'Erreur dans la commande', 'Changement d’avis', 'Autre'].map((v) => (
+            <option value="">{m.cancel_modal_reason_label}</option>
+            {m.cancel_reasons.map((v) => (
               <option key={v} value={v}>
                 {v}
               </option>
             ))}
           </select>
 
-          {error && <p className="error" role="alert" style={{ marginTop: '12px' }}>{error}</p>}
+          {error && (
+            <p className="error" role="alert" style={{ marginTop: '12px' }}>
+              {error}
+            </p>
+          )}
 
           <div className="managed-actions" style={{ marginTop: '24px' }}>
             <button
@@ -452,10 +501,15 @@ export function ManagedOrderPanel({
               disabled={busy}
               onClick={() => dialog.current?.close()}
             >
-              Conserver la commande
+              {m.cancel_keep_btn}
             </button>
-            <button type="submit" className="button" style={{ background: '#b91c1c', borderColor: '#b91c1c' }} disabled={busy}>
-              {busy ? 'Annulation…' : 'Confirmer l’annulation'}
+            <button
+              type="submit"
+              className="button"
+              style={{ background: '#b91c1c', borderColor: '#b91c1c' }}
+              disabled={busy}
+            >
+              {busy ? m.cancel_cancelling : m.cancel_confirm_btn}
             </button>
           </div>
         </form>

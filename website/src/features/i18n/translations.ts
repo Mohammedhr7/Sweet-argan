@@ -208,6 +208,96 @@ export interface Dictionary {
     copied: string;
     track_btn: string;
   };
+  order_management: {
+    eyebrow: string;
+    prompt_title: string;
+    prompt_desc: string;
+    prompt_modified_notice: string;
+    btn_confirm: string;
+    btn_confirming: string;
+    btn_modify: string;
+    btn_cancel: string;
+    status_confirmation_label: string;
+    status_fulfillment_label: string;
+    confirmation_statuses: Record<string, string>;
+    fulfillment_statuses: Record<string, string>;
+    confirmed_title: string;
+    order_number_label: string;
+    copy_number_btn: string;
+    copied_btn: string;
+    track_order_btn: string;
+    confirmed_notice: string;
+    countdown_text: string;
+    order_locked_notice: string;
+    contact_support: string;
+    cancelled_title: string;
+    cancelled_date_prefix: string;
+    cancelled_reason_label: string;
+    cancelled_stock_freed: string;
+    back_to_shop: string;
+    order_details_title: string;
+    order_placed_on: string;
+    quantity_label: string;
+    subtotal: string;
+    shipping: string;
+    free_shipping: string;
+    discount: string;
+    total_with_tax: string;
+    delivery_address_title: string;
+    city_label: string;
+    address_label: string;
+    notes_label: string;
+    timeline_title: string;
+    in_progress: string;
+    cancel_modal_title: string;
+    cancel_modal_desc: string;
+    cancel_modal_reason_label: string;
+    cancel_reasons: string[];
+    cancel_keep_btn: string;
+    cancel_confirm_btn: string;
+    cancel_cancelling: string;
+  };
+  order_editor: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    items_title: string;
+    add_product_btn: string;
+    per_unit: string;
+    remove_item: string;
+    empty_items_error: string;
+    delivery_title: string;
+    city_label: string;
+    address_label: string;
+    notes_label: string;
+    notes_placeholder: string;
+    provisional_title: string;
+    articles_count: string;
+    provisional_notice: string;
+    save_btn: string;
+    saving_btn: string;
+    back_to_order_btn: string;
+    modal_title: string;
+    modal_search_label: string;
+    modal_search_placeholder: string;
+    modal_search_btn: string;
+    modal_loading: string;
+    modal_no_products: string;
+    modal_add_btn: string;
+    modal_close_btn: string;
+  };
+  tracking_page: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    code_label: string;
+    code_placeholder: string;
+    phone_label: string;
+    phone_placeholder: string;
+    submit_btn: string;
+    submitting_btn: string;
+    error_fallback: string;
+  };
 }
 
 export const translations: Record<Locale, Dictionary> = {
@@ -431,6 +521,110 @@ export const translations: Record<Locale, Dictionary> = {
       copy_btn: 'نسخ رقم الطلب',
       copied: '✓ تم نسخ رقم الطلب بنجاح!',
       track_btn: 'تتبع طلبيتي الآن'
+    },
+    order_management: {
+      eyebrow: 'سويت أركان · إدارة وتتبع الطلب',
+      prompt_title: 'هل ترغب في تأكيد طلبك؟',
+      prompt_desc: 'تحقق من المعلومات أسفله ثم قم بتأكيد طلبك. سيكون لديك 24 ساعة لتعديله أو إلغائه عبر الموقع ما دام تحضيره لم يبدأ بعد.',
+      prompt_modified_notice: '⚠️ تم تعديل طلبك. يرجى تأكيد النسخة الجديدة لبدء تحضيرها وإرسالها.',
+      btn_confirm: '✅ تأكيد الطلب',
+      btn_confirming: 'جاري الحفظ…',
+      btn_modify: '✏️ تعديل الطلب',
+      btn_cancel: '❌ إلغاء الطلب',
+      status_confirmation_label: 'التأكيد',
+      status_fulfillment_label: 'التوصيل',
+      confirmation_statuses: {
+        pending: 'في انتظار التأكيد',
+        confirmed: 'تم التأكيد',
+        needs_review: 'قيد المراجعة',
+        rejected: 'مرفوض',
+        expired: 'منتهي الصلاحية'
+      },
+      fulfillment_statuses: {
+        new: 'تم استلام الطلب',
+        processing: 'قيد التحضير',
+        ready: 'جاهز للشحن',
+        shipped: 'تم الشحن',
+        delivered: 'تم التوصيل',
+        cancelled: 'ملغى',
+        returned: 'مرتجع'
+      },
+      confirmed_title: 'تم تأكيد طلبك بنجاح 🎉',
+      order_number_label: 'رقم الطلب :',
+      copy_number_btn: 'نسخ رقم الطلب',
+      copied_btn: '✓ تم نسخ الرقم !',
+      track_order_btn: 'تتبع طلبي',
+      confirmed_notice: 'احتفظ برقم الطلب لتتبع شحنتك. يمكنك تعديل أو إلغاء الطلب خلال 24 ساعة ما دام تحضيره لم يبدأ بعد.',
+      countdown_text: 'يمكنك تعديل أو إلغاء هذا الطلب خلال {time} ما دام تحضيره لم يبدأ.',
+      order_locked_notice: '🔒 لم يعد بالإمكان تعديل أو إلغاء هذا الطلب عبر الموقع (بدأ التحضير أو انتهت مهلة 24 ساعة).',
+      contact_support: 'تواصل مع سويت أركان',
+      cancelled_title: 'تم إلغاء الطلب',
+      cancelled_date_prefix: 'تم إلغاء هذا الطلب بتاريخ ',
+      cancelled_reason_label: 'سبب الإلغاء :',
+      cancelled_stock_freed: 'تم تحرير المخزون المحجوز لمنتجاتك على الفور.',
+      back_to_shop: 'العودة إلى المتجر',
+      order_details_title: 'تفاصيل الطلب',
+      order_placed_on: 'تم تقديم الطلب في',
+      quantity_label: 'الكمية :',
+      subtotal: 'المجموع الفرعي',
+      shipping: 'التوصيل',
+      free_shipping: 'مجاني',
+      discount: 'الخصم',
+      total_with_tax: 'المجموع الإجمالي',
+      delivery_address_title: 'عنوان التوصيل',
+      city_label: 'المدينة :',
+      address_label: 'العنوان :',
+      notes_label: 'ملاحظة التوصيل :',
+      timeline_title: 'مراحل وتتبع طلبك',
+      in_progress: 'قيد الإنجاز…',
+      cancel_modal_title: 'هل ترغب في إلغاء هذا الطلب؟',
+      cancel_modal_desc: 'هل أنت متأكد من رغبتك في إلغاء هذا الطلب؟ سيتم تحرير المخزون المحجوز لمنتجاتك فوراً.',
+      cancel_modal_reason_label: 'سبب الإلغاء (اختياري)',
+      cancel_reasons: ['لم أعد أرغب في الطلب', 'خطأ في المنتجات', 'تغيير رأي', 'أخرى'],
+      cancel_keep_btn: 'الاحتفاظ بالطلب',
+      cancel_confirm_btn: 'تأكيد الإلغاء',
+      cancel_cancelling: 'جاري الإلغاء…'
+    },
+    order_editor: {
+      eyebrow: 'سويت أركان · تعديل الطلب',
+      title: 'تعديل طلبك',
+      subtitle: 'أنت تعدل طلبك مباشرة. سيتم التحقق من الأسعار والمخزون ومصاريف التوصيل تلقائياً عند الحفظ.',
+      items_title: 'منتجات الطلب',
+      add_product_btn: '+ إضافة منتج',
+      per_unit: 'للوحدة',
+      remove_item: 'حذف',
+      empty_items_error: 'يجب أن يحتوي طلبك على منتج واحد على الأقل.',
+      delivery_title: 'عنوان التوصيل',
+      city_label: 'مدينة التوصيل',
+      address_label: 'العنوان الكامل',
+      notes_label: 'تعليمات التوصيل (اختياري)',
+      notes_placeholder: 'أي توجيهات للموزع...',
+      provisional_title: 'الملخص التقديري',
+      articles_count: 'المنتجات',
+      provisional_notice: 'ℹ️ سيتم إعادة احتساب المجموع النهائي ومصاريف التوصيل تلقائياً من قبل الخادم. ستتمكن من تأكيد النسخة الجديدة في الصفحة الموالية.',
+      save_btn: 'حفظ التعديلات',
+      saving_btn: 'جاري الحفظ…',
+      back_to_order_btn: 'العودة إلى الطلب',
+      modal_title: 'إضافة منتج إلى طلبك',
+      modal_search_label: 'بحث بالاسم',
+      modal_search_placeholder: 'ابحث عن زيت أركان، صابون، كريم…',
+      modal_search_btn: 'بحث',
+      modal_loading: 'جاري تحميل المنتجات…',
+      modal_no_products: 'لم يتم العثور على أي منتج.',
+      modal_add_btn: 'إضافة',
+      modal_close_btn: 'إغلاق'
+    },
+    tracking_page: {
+      eyebrow: 'سويت أركان · فضاء الزبناء',
+      title: 'تتبع طلبيتي',
+      subtitle: 'تحققي من مراحل شحنتكِ، أكدي طلبكِ أو عدليه بإدخال رقم الطلب ورقم هاتفكِ المحمول.',
+      code_label: 'رقم الطلب (مثال: SA-2026-00000001)',
+      code_placeholder: 'SA-2026-00000001',
+      phone_label: 'رقم الهاتف المسجل عند الطلب',
+      phone_placeholder: '06 61 98 33 29',
+      submit_btn: 'البحث عن طلبيتي',
+      submitting_btn: 'جاري البحث…',
+      error_fallback: 'الخدمة غير متوفرة مؤقتاً. يرجى إعادة المحاولة.'
     }
   },
   fr: {
@@ -653,6 +847,110 @@ export const translations: Record<Locale, Dictionary> = {
       copy_btn: 'Copier le numéro de commande',
       copied: '✓ Numéro copié avec succès !',
       track_btn: 'Suivre ma commande'
+    },
+    order_management: {
+      eyebrow: 'SWEET ARGAN · SUIVI DE COMMANDE',
+      prompt_title: 'Souhaitez-vous confirmer votre commande ?',
+      prompt_desc: 'Vérifiez les informations ci-dessous puis confirmez votre commande. Vous disposerez ensuite de 24 heures pour la modifier ou l’annuler en ligne tant que sa préparation n’a pas commencé.',
+      prompt_modified_notice: '⚠️ Votre commande a été modifiée. Veuillez confirmer la nouvelle version pour lancer sa prise en charge.',
+      btn_confirm: '✅ Confirmer la commande',
+      btn_confirming: 'Enregistrement…',
+      btn_modify: '✏️ Modifier la commande',
+      btn_cancel: '❌ Annuler la commande',
+      status_confirmation_label: 'Confirmation',
+      status_fulfillment_label: 'Livraison',
+      confirmation_statuses: {
+        pending: 'À confirmer',
+        confirmed: 'Confirmée',
+        needs_review: 'À examiner',
+        rejected: 'Refusée',
+        expired: 'Expirée'
+      },
+      fulfillment_statuses: {
+        new: 'Commande reçue',
+        processing: 'En préparation',
+        ready: 'Prête pour expédition',
+        shipped: 'Expédiée',
+        delivered: 'Livrée',
+        cancelled: 'Annulée',
+        returned: 'Retournée'
+      },
+      confirmed_title: 'Commande confirmée 🎉',
+      order_number_label: 'Numéro de commande :',
+      copy_number_btn: 'Copier le numéro',
+      copied_btn: '✓ Numéro copié !',
+      track_order_btn: 'Suivre ma commande',
+      confirmed_notice: 'Conservez ce numéro pour suivre votre commande. Les modifications sont possibles pendant 24 heures après confirmation, tant que sa préparation n’a pas commencé.',
+      countdown_text: 'Vous pouvez encore modifier ou annuler cette commande pendant {time}, tant que sa préparation n’a pas commencé.',
+      order_locked_notice: '🔒 Cette commande ne peut plus être modifiée ou annulée en ligne (la préparation a commencé ou le délai de 24 h est écoulé).',
+      contact_support: 'Contacter Sweet Argan',
+      cancelled_title: 'Commande annulée',
+      cancelled_date_prefix: 'Cette commande a été annulée le ',
+      cancelled_reason_label: 'Motif :',
+      cancelled_stock_freed: 'Le stock réservé pour vos articles a été immédiatement libéré.',
+      back_to_shop: 'Retourner à la boutique',
+      order_details_title: 'Détails de la commande',
+      order_placed_on: 'Commande passée le',
+      quantity_label: 'Quantité :',
+      subtotal: 'Sous-total',
+      shipping: 'Livraison',
+      free_shipping: 'Gratuite',
+      discount: 'Remise',
+      total_with_tax: 'Total TTC',
+      delivery_address_title: 'Adresse de livraison',
+      city_label: 'Ville :',
+      address_label: 'Adresse :',
+      notes_label: 'Note de livraison :',
+      timeline_title: 'Suivi et étapes de votre commande',
+      in_progress: 'En cours…',
+      cancel_modal_title: 'Annuler cette commande ?',
+      cancel_modal_desc: 'Êtes-vous sûr de vouloir annuler cette commande ? Le stock réservé pour vos articles sera immédiatement libéré.',
+      cancel_modal_reason_label: 'Motif (facultatif)',
+      cancel_reasons: ['Je ne souhaite plus commander', 'Erreur dans la commande', 'Changement d’avis', 'Autre'],
+      cancel_keep_btn: 'Conserver la commande',
+      cancel_confirm_btn: 'Confirmer l’annulation',
+      cancel_cancelling: 'Annulation…'
+    },
+    order_editor: {
+      eyebrow: 'SWEET ARGAN · MODIFICATION',
+      title: 'Modifier votre commande',
+      subtitle: 'Vous modifiez directement votre commande existante. Les prix, la disponibilité du stock et les frais de livraison seront vérifiés par le serveur lors de l’enregistrement.',
+      items_title: 'Articles de la commande',
+      add_product_btn: '+ Ajouter un produit',
+      per_unit: '/ unité',
+      remove_item: 'Retirer',
+      empty_items_error: 'Votre commande doit contenir au moins un produit. Ajoutez un produit ou retournez à la commande pour l’annuler.',
+      delivery_title: 'Adresse de livraison',
+      city_label: 'Ville de livraison',
+      address_label: 'Adresse complète',
+      notes_label: 'Précisions de livraison (facultatif)',
+      notes_placeholder: 'Instructions pour le livreur...',
+      provisional_title: 'Récapitulatif provisoire',
+      articles_count: 'Articles',
+      provisional_notice: 'ℹ️ Le total définitif et les frais de livraison seront recalculés automatiquement par le serveur. Vous pourrez confirmer la nouvelle version sur la page suivante.',
+      save_btn: 'Enregistrer les modifications',
+      saving_btn: 'Enregistrement…',
+      back_to_order_btn: 'Retour à la commande',
+      modal_title: 'Ajouter un produit',
+      modal_search_label: 'Rechercher par nom',
+      modal_search_placeholder: 'ex. Huile d’argan, Savon…',
+      modal_search_btn: 'Rechercher',
+      modal_loading: 'Chargement du catalogue…',
+      modal_no_products: 'Aucun produit trouvé.',
+      modal_add_btn: 'Ajouter',
+      modal_close_btn: 'Fermer'
+    },
+    tracking_page: {
+      eyebrow: 'SWEET ARGAN · ESPACE CLIENT',
+      title: 'Suivre ma commande',
+      subtitle: 'Consultez l’état d’avancement de votre commande, confirmez-la ou modifiez-la en saisissant votre numéro public de commande et votre numéro de téléphone.',
+      code_label: 'Numéro de commande (ex: SA-2026-00000001)',
+      code_placeholder: 'SA-2026-00000001',
+      phone_label: 'Numéro de téléphone utilisé lors de la commande',
+      phone_placeholder: '06 61 98 33 29',
+      submit_btn: 'Retrouver ma commande',
+      submitting_btn: 'Recherche en cours…',
+      error_fallback: 'Service momentanément indisponible. Réessayez.'
     }
   },
   en: {
@@ -875,6 +1173,133 @@ export const translations: Record<Locale, Dictionary> = {
       copy_btn: 'Copy Order Code',
       copied: '✓ Order code copied successfully!',
       track_btn: 'Track My Order Now'
+    },
+    order_management: {
+      eyebrow: 'SWEET ARGAN · ORDER TRACKING',
+      prompt_title: 'Would you like to confirm your order?',
+      prompt_desc: 'Review the details below and confirm your order. You will then have 24 hours to modify or cancel online before preparation begins.',
+      prompt_modified_notice: '⚠️ Your order has been modified. Please confirm the new version to initiate processing.',
+      btn_confirm: '✅ Confirm Order',
+      btn_confirming: 'Saving…',
+      btn_modify: '✏️ Modify Order',
+      btn_cancel: '❌ Cancel Order',
+      status_confirmation_label: 'Confirmation',
+      status_fulfillment_label: 'Fulfillment',
+      confirmation_statuses: {
+        pending: 'Pending Confirmation',
+        confirmed: 'Confirmed',
+        needs_review: 'Under Review',
+        rejected: 'Declined',
+        expired: 'Expired'
+      },
+      fulfillment_statuses: {
+        new: 'Order Received',
+        processing: 'In Preparation',
+        ready: 'Ready for Dispatch',
+        shipped: 'Shipped',
+        delivered: 'Delivered',
+        cancelled: 'Cancelled',
+        returned: 'Returned'
+      },
+      confirmed_title: 'Order Confirmed 🎉',
+      order_number_label: 'Order Number:',
+      copy_number_btn: 'Copy Order Number',
+      copied_btn: '✓ Number Copied!',
+      track_order_btn: 'Track My Order',
+      confirmed_notice: 'Save this order code to track your parcel. Modifications are allowed for 24 hours after confirmation, as long as preparation has not started.',
+      countdown_text: 'You can still modify or cancel this order for {time}, before preparation starts.',
+      order_locked_notice: '🔒 This order can no longer be modified or cancelled online (preparation has started or the 24h window elapsed).',
+      contact_support: 'Contact Sweet Argan',
+      cancelled_title: 'Order Cancelled',
+      cancelled_date_prefix: 'This order was cancelled on ',
+      cancelled_reason_label: 'Reason:',
+      cancelled_stock_freed: 'Reserved inventory for your items has been immediately released.',
+      back_to_shop: 'Return to Shop',
+      order_details_title: 'Order Details',
+      order_placed_on: 'Order placed on',
+      quantity_label: 'Quantity:',
+      subtotal: 'Subtotal',
+      shipping: 'Shipping',
+      free_shipping: 'Free',
+      discount: 'Discount',
+      total_with_tax: 'Total',
+      delivery_address_title: 'Delivery Address',
+      city_label: 'City:',
+      address_label: 'Address:',
+      notes_label: 'Delivery Notes:',
+      timeline_title: 'Order Timeline & Tracking',
+      in_progress: 'In progress…',
+      cancel_modal_title: 'Cancel this order?',
+      cancel_modal_desc: 'Are you sure you want to cancel this order? The reserved inventory will be freed immediately.',
+      cancel_modal_reason_label: 'Reason (optional)',
+      cancel_reasons: ['No longer needed', 'Mistake in order', 'Changed my mind', 'Other'],
+      cancel_keep_btn: 'Keep Order',
+      cancel_confirm_btn: 'Confirm Cancellation',
+      cancel_cancelling: 'Cancelling…'
+    },
+    order_editor: {
+      eyebrow: 'SWEET ARGAN · ORDER MODIFICATION',
+      title: 'Modify Your Order',
+      subtitle: 'You are directly editing your existing order. Prices, inventory, and delivery fees will be verified by the server upon saving.',
+      items_title: 'Order Items',
+      add_product_btn: '+ Add a Product',
+      per_unit: '/ unit',
+      remove_item: 'Remove',
+      empty_items_error: 'Your order must contain at least one item. Add a product or return to your order to cancel it.',
+      delivery_title: 'Delivery Address',
+      city_label: 'Delivery City',
+      address_label: 'Full Address',
+      notes_label: 'Delivery Instructions (optional)',
+      notes_placeholder: 'Notes for the courier...',
+      provisional_title: 'Estimated Summary',
+      articles_count: 'Items',
+      provisional_notice: 'ℹ️ Final total and delivery fee will be recalculated automatically by the server. You can confirm the new version on the next page.',
+      save_btn: 'Save Modifications',
+      saving_btn: 'Saving…',
+      back_to_order_btn: 'Back to Order',
+      modal_title: 'Add a Product',
+      modal_search_label: 'Search by Name',
+      modal_search_placeholder: 'e.g. Argan oil, Soap, Cream…',
+      modal_search_btn: 'Search',
+      modal_loading: 'Loading catalog…',
+      modal_no_products: 'No products found.',
+      modal_add_btn: 'Add',
+      modal_close_btn: 'Close'
+    },
+    tracking_page: {
+      eyebrow: 'SWEET ARGAN · CUSTOMER AREA',
+      title: 'Track My Order',
+      subtitle: 'Check your delivery status, confirm your order, or make changes by providing your public order code and phone number.',
+      code_label: 'Order Code (e.g. SA-2026-00000001)',
+      code_placeholder: 'SA-2026-00000001',
+      phone_label: 'Mobile Phone Number Used at Checkout',
+      phone_placeholder: '06 61 98 33 29',
+      submit_btn: 'Find My Order',
+      submitting_btn: 'Searching…',
+      error_fallback: 'Service temporarily unavailable. Please try again.'
     }
   }
 };
+
+export const categoryNameTranslations: Record<string, { ar: string; fr: string; en: string }> = {
+  'soins-du-visage': { ar: 'العناية بالوجه', fr: 'Soins du visage', en: 'Face Care' },
+  'soins du visage': { ar: 'العناية بالوجه', fr: 'Soins du visage', en: 'Face Care' },
+  'soins-du-corps': { ar: 'العناية بالجسم', fr: 'Soins du corps', en: 'Body Care' },
+  'soins du corps': { ar: 'العناية بالجسم', fr: 'Soins du corps', en: 'Body Care' },
+  'savons': { ar: 'الصابون الطبيعي', fr: 'Savons', en: 'Natural Soaps' },
+  'masques-et-soins': { ar: 'الأقنعة والصلصال', fr: 'Masques & Argiles', en: 'Masks & Clays' },
+  'masques & argiles': { ar: 'الأقنعة والصلصال', fr: 'Masques & Argiles', en: 'Masks & Clays' },
+  'huiles-et-solaires': { ar: 'الزيوت ومستحضرات التسمير', fr: 'Huiles & Solaires', en: 'Oils & Sun Care' },
+  'huiles & solaires': { ar: 'الزيوت ومستحضرات التسمير', fr: 'Huiles & Solaires', en: 'Oils & Sun Care' },
+  'terroir-marocain': { ar: 'المنتجات المجالية المغربية', fr: 'Terroir marocain', en: 'Moroccan Terroir' },
+  'terroir marocain': { ar: 'المنتجات المجالية المغربية', fr: 'Terroir marocain', en: 'Moroccan Terroir' },
+  'coffrets': { ar: 'المجموعات والهدايا', fr: 'Coffrets', en: 'Gift Sets' }
+};
+
+export function getLocalizedCategoryName(nameOrSlug: string, locale: Locale): string {
+  const key = nameOrSlug.toLowerCase().trim();
+  const entry = categoryNameTranslations[key];
+  if (entry) return entry[locale] || entry.fr;
+  return nameOrSlug;
+}
+

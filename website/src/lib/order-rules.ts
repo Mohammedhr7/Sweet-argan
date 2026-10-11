@@ -77,13 +77,21 @@ export function canCustomerConfirmOrder(
 /**
  * Format remaining seconds into a clear human-readable string (e.g., "18 h 42 min")
  */
-export function formatRemainingTime(seconds: number): string {
-  if (seconds <= 0) return '0 min';
+export function formatRemainingTime(seconds: number, locale: string = 'fr'): string {
+  if (seconds <= 0) return locale === 'ar' ? '0 دقيقة' : '0 min';
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
+
+  if (locale === 'ar') {
+    if (hours > 0) {
+      return `${hours} ساعة و ${minutes} دقيقة`;
+    }
+    return `${minutes} دقيقة`;
+  }
 
   if (hours > 0) {
     return `${hours} h ${minutes} min`;
   }
   return `${minutes} min`;
 }
+

@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { ManagedOrder } from '@/types/order-management';
 import { StorefrontImage } from '@/components/storefront-image';
 import { money } from '@/utils/money';
+import { useLanguage } from '@/features/i18n/language-context';
 
 interface Choice {
   id: string;
@@ -23,77 +24,104 @@ export function OrderEditor({
   initialToken?: string;
 }) {
   const router = useRouter();
+  const { t, locale, dir } = useLanguage();
+  const e = t.order_editor;
+
   const [items, setItems] = useState(o.order_items);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [searching, setSearching] = useState(false);
   const [choices, setChoices] = useState<Choice[]>([]);
+  const [catalogLoaded, setCatalogLoaded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
   const dialog = useRef<HTMLDialogElement>(null);
 
-  async function search(q: string) {
+  async function loadCatalog(q = '') {
     setSearching(true);
     setError('');
     try {
       const r = await fetch('/api/order-catalog?q=' + encodeURIComponent(q));
       if (!r.ok) throw new Error();
-      setChoices(await r.json());
+      const data: Choice[] = await r.json();
+      setChoices(data);
+      setCatalogLoaded(true);
     } catch {
-      setError('Catalogue momentanément indisponible. Réessayez.');
+      setError(
+        locale === 'ar'
+          ? 'تعذر تحميل المنتجات حالياً. يرجى إعادة المحاولة.'
+          : 'Catalogue momentanément indisponible. Réessayez.'
+      );
     } finally {
       setSearching(false);
     }
   }
 
-  function add(p: Choice, v?: Choice['variants'][number]) {
-    const variantId = v?.id || null;
+  function handleOpenDialog() {
+    dialog.current?.showModal();
+    if (!catalogLoaded) {
+      void loadCatalog('');
+    }
+  }
+
+  function add(p: Choice, variantId?: string | null) {
+    const v = variantId ? p.variants.find((vr) => vr.id === variantId) : null;
+    const finalVariantId = v ? v.id : null;
     const index = items.findIndex(
-      (i) => i.product_id === p.id && i.variant_id === variantId
+      (item) => item.product_id === p.id && item.variant_id === finalVariantId
     );
 
     if (index >= 0) {
       setItems(
-        items.map((i, n) =>
-          n === index ? { ...i, quantity: Math.min(20, i.quantity + 1) } : i
+        items.map((item, n) =>
+          n === index ? { ...item, quantity: Math.min(20, item.quantity + 1) } : item
         )
       );
     } else if (items.length < 30) {
+      const unitPrice = v ? v.price : p.price;
       setItems([
         ...items,
         {
           product_id: p.id,
-          variant_id: variantId,
+          variant_id: finalVariantId,
           product_name: p.name + (v ? ' — ' + v.name : ''),
           product_image_url: p.image,
           quantity: 1,
-          unit_price: v?.price ?? p.price,
-          line_total: v?.price ?? p.price
+          unit_price: unitPrice,
+          line_total: unitPrice
         }
       ]);
     }
     dialog.current?.close();
   }
 
+  const filteredChoices = choices.filter((p) =>
+    searchQuery.trim() === ''
+      ? true
+      : p.name.toLowerCase().includes(searchQuery.toLowerCase().trim())
+  );
+
   const returnUrl = `/order/${o.public_order_code}/confirmation${
     initialToken ? '?token=' + encodeURIComponent(initialToken) : ''
   }`;
 
   return (
-    <div className="managed-order" lang="fr">
-      <div className="eyebrow">SWEET ARGAN · MODIFICATION</div>
-      <h1 style={{ fontSize: '32px', marginBottom: '8px' }}>Modifier votre commande</h1>
+    <div className="managed-order" lang={locale} dir={dir}>
+      <div className="eyebrow">{e.eyebrow}</div>
+      <h1 style={{ fontSize: '32px', marginBottom: '8px' }}>{e.title}</h1>
       <div className="order-code-badge" style={{ marginBottom: '16px' }}>
         {o.public_order_code}
       </div>
       <p style={{ color: 'var(--muted)', fontSize: '14px', marginBottom: '24px' }}>
-        Vous modifiez directement votre commande existante. Les prix, la disponibilité du stock et les frais de livraison seront vérifiés par le serveur lors de l’enregistrement.
+        {e.subtitle}
       </p>
 
       <form
-        onSubmit={async (e) => {
-          e.preventDefault();
+        onSubmit={async (evt) => {
+          evt.preventDefault();
           setBusy(true);
           setError('');
-          const f = new FormData(e.currentTarget);
+          const f = new FormData(evt.currentTarget);
           try {
             const r = await fetch('/api/order-management', {
               method: 'POST',
@@ -102,10 +130,10 @@ export function OrderEditor({
                 code: o.public_order_code,
                 revision: o.revision,
                 action: 'modify',
-                items: items.map((i) => ({
-                  product_id: i.product_id,
-                  variant_id: i.variant_id,
-                  quantity: i.quantity
+                items: items.map((item) => ({
+                  product_id: item.product_id,
+                  variant_id: item.variant_id,
+                  quantity: item.quantity
                 })),
                 shipping: {
                   city: f.get('city'),
@@ -121,8 +149,14 @@ export function OrderEditor({
 
             router.push(returnUrl);
             router.refresh();
-          } catch (e) {
-            setError(e instanceof Error ? e.message : 'Connexion interrompue. Réessayez.');
+          } catch (err) {
+            setError(
+              err instanceof Error
+                ? err.message
+                : locale === 'ar'
+                ? 'تعذر حفظ التعديلات. يرجى إعادة المحاولة.'
+                : 'Connexion interrompue. Réessayez.'
+            );
           } finally {
             setBusy(false);
           }
@@ -131,84 +165,112 @@ export function OrderEditor({
         <fieldset disabled={busy} style={{ border: 0, padding: 0, minWidth: 0, margin: 0 }}>
           {/* ITEMS SECTION */}
           <section className="panel">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h2 style={{ fontSize: '20px', margin: 0 }}>Articles de la commande</h2>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '16px'
+              }}
+            >
+              <h2 style={{ fontSize: '20px', margin: 0 }}>{e.items_title}</h2>
               <button
                 type="button"
                 className="button secondary"
-                style={{ padding: '8px 16px', minHeight: '38px', fontSize: '12px' }}
+                style={{ padding: '8px 16px', minHeight: '38px', fontSize: '13px' }}
                 disabled={items.length >= 30}
-                onClick={() => {
-                  dialog.current?.showModal();
-                  void search('');
-                }}
+                onClick={handleOpenDialog}
               >
-                + Ajouter un produit
+                {e.add_product_btn}
               </button>
             </div>
 
-            {items.map((i, n) => (
-              <div className="managed-item" key={i.product_id + ':' + (i.variant_id || '')}>
+            {items.map((item, n) => (
+              <div
+                className="managed-item"
+                key={item.product_id + ':' + (item.variant_id || '')}
+              >
                 <StorefrontImage
-                  src={i.product_image_url || ''}
-                  alt={i.product_name}
+                  src={item.product_image_url || ''}
+                  alt={item.product_name}
                   width={64}
                   height={80}
                   style={{ objectFit: 'contain' }}
                 />
                 <div>
-                  <strong style={{ fontSize: '14px', display: 'block' }}>{i.product_name}</strong>
+                  <strong style={{ fontSize: '14px', display: 'block' }}>
+                    {item.product_name}
+                  </strong>
                   <p style={{ margin: '4px 0 8px', color: 'var(--muted)', fontSize: '13px' }}>
-                    {money(i.unit_price)} / unité
+                    {money(item.unit_price)} {e.per_unit}
                   </p>
                   <div className="quantity-controls">
                     <button
                       type="button"
-                      aria-label={'Diminuer ' + i.product_name}
-                      disabled={i.quantity <= 1}
+                      aria-label="Decrease quantity"
+                      disabled={item.quantity <= 1}
                       onClick={() =>
-                        setItems(items.map((x, k) => (k === n ? { ...x, quantity: x.quantity - 1 } : x)))
+                        setItems(
+                          items.map((x, k) =>
+                            k === n ? { ...x, quantity: x.quantity - 1 } : x
+                          )
+                        )
                       }
                     >
                       −
                     </button>
-                    <span aria-live="polite" style={{ minWidth: '24px', textAlign: 'center', fontWeight: 600 }}>
-                      {i.quantity}
+                    <span
+                      aria-live="polite"
+                      style={{ minWidth: '24px', textAlign: 'center', fontWeight: 600 }}
+                    >
+                      {item.quantity}
                     </span>
                     <button
                       type="button"
-                      aria-label={'Augmenter ' + i.product_name}
-                      disabled={i.quantity >= 20}
+                      aria-label="Increase quantity"
+                      disabled={item.quantity >= 20}
                       onClick={() =>
-                        setItems(items.map((x, k) => (k === n ? { ...x, quantity: x.quantity + 1 } : x)))
+                        setItems(
+                          items.map((x, k) =>
+                            k === n ? { ...x, quantity: x.quantity + 1 } : x
+                          )
+                        )
                       }
                     >
                       +
                     </button>
                     <button
                       type="button"
-                      style={{ color: '#b91c1c', border: '1px solid #fecaca', background: '#fff' }}
+                      style={{
+                        color: '#b91c1c',
+                        border: '1px solid #fecaca',
+                        background: '#fff',
+                        marginLeft: dir === 'rtl' ? 0 : '8px',
+                        marginRight: dir === 'rtl' ? '8px' : 0
+                      }}
                       onClick={() => setItems(items.filter((_, k) => k !== n))}
                     >
-                      Retirer
+                      {e.remove_item}
                     </button>
                   </div>
                 </div>
-                <strong style={{ fontSize: '15px' }}>{money(i.unit_price * i.quantity)}</strong>
+                <strong style={{ fontSize: '15px' }}>
+                  {money(item.unit_price * item.quantity)}
+                </strong>
               </div>
             ))}
 
             {!items.length && (
               <p role="alert" className="error" style={{ marginTop: '16px' }}>
-                Votre commande doit contenir au moins un produit. Ajoutez un produit ou retournez à la commande pour l’annuler.
+                {e.empty_items_error}
               </p>
             )}
           </section>
 
           {/* SHIPPING ADDRESS */}
           <section className="panel">
-            <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>Adresse de livraison</h2>
-            <label htmlFor="edit-city">Ville de livraison</label>
+            <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>{e.delivery_title}</h2>
+            <label htmlFor="edit-city">{e.city_label}</label>
             <input
               id="edit-city"
               name="city"
@@ -218,34 +280,41 @@ export function OrderEditor({
               defaultValue={o.shipping_city}
             />
 
-            <label htmlFor="edit-address">Adresse complète</label>
+            <label htmlFor="edit-address">{e.address_label}</label>
             <textarea
               id="edit-address"
               name="address"
               required
-              minLength={8}
+              minLength={2}
               maxLength={500}
               defaultValue={o.shipping_address}
             />
 
-            <label htmlFor="edit-notes">Précisions de livraison (facultatif)</label>
+            <label htmlFor="edit-notes">{e.notes_label}</label>
             <textarea
               id="edit-notes"
               name="notes"
               maxLength={1000}
+              placeholder={e.notes_placeholder}
               defaultValue={o.shipping_notes || ''}
             />
           </section>
 
           {/* PROVISIONAL SUMMARY */}
           <section className="panel">
-            <h2 style={{ fontSize: '20px', marginBottom: '12px' }}>Récapitulatif provisoire</h2>
+            <h2 style={{ fontSize: '20px', marginBottom: '12px' }}>{e.provisional_title}</h2>
             <div className="summary-line">
-              <span>Articles ({items.reduce((s, i) => s + i.quantity, 0)})</span>
-              <strong>{money(items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0))}</strong>
+              <span>
+                {e.articles_count} ({items.reduce((sum, item) => sum + item.quantity, 0)})
+              </span>
+              <strong>
+                {money(
+                  items.reduce((sum, item) => sum + item.quantity * item.unit_price, 0)
+                )}
+              </strong>
             </div>
             <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px' }}>
-              ℹ️ Le total définitif et les frais de livraison seront recalculés automatiquement par le serveur. Vous pourrez confirmer la nouvelle version sur la page suivante.
+              {e.provisional_notice}
             </p>
           </section>
 
@@ -257,95 +326,188 @@ export function OrderEditor({
 
           <div className="managed-actions">
             <button className="button button-confirm" disabled={busy || !items.length}>
-              {busy ? 'Enregistrement…' : 'Enregistrer les modifications'}
+              {busy ? e.saving_btn : e.save_btn}
             </button>
             <Link className="button secondary" href={returnUrl}>
-              Retour à la commande
+              {e.back_to_order_btn}
             </Link>
           </div>
         </fieldset>
       </form>
 
-      {/* CATALOG SEARCH DIALOG */}
-      <dialog ref={dialog} className="order-dialog">
-        <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>Ajouter un produit</h2>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void search(String(new FormData(e.currentTarget).get('search') || ''));
+      {/* RICH VISUAL CATALOG SELECTION DIALOG */}
+      <dialog
+        ref={dialog}
+        className="order-dialog"
+        dir={dir}
+        style={{ maxWidth: '640px', width: '92vw', padding: '24px' }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '16px'
           }}
-          style={{ marginBottom: '20px' }}
         >
-          <label htmlFor="catalog-search">Rechercher par nom</label>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <input name="search" id="catalog-search" maxLength={100} placeholder="ex. Huile d’argan, Savon…" />
-            <button className="button secondary" style={{ minWidth: '100px' }} disabled={searching}>
-              Rechercher
-            </button>
-          </div>
-        </form>
+          <h2 style={{ fontSize: '22px', margin: 0 }}>{e.modal_title}</h2>
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => dialog.current?.close()}
+            style={{ fontSize: '18px', padding: '4px 8px' }}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Live Search Input */}
+        <div style={{ marginBottom: '18px' }}>
+          <label htmlFor="catalog-search" style={{ fontSize: '13px', fontWeight: 600 }}>
+            {e.modal_search_label}
+          </label>
+          <input
+            id="catalog-search"
+            value={searchQuery}
+            onChange={(evt) => setSearchQuery(evt.target.value)}
+            placeholder={e.modal_search_placeholder}
+            style={{ width: '100%', boxSizing: 'border-box', marginTop: '6px' }}
+          />
+        </div>
 
         {searching ? (
-          <p role="status">Chargement du catalogue…</p>
-        ) : choices.length > 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '380px', overflowY: 'auto' }}>
-            {choices.map((p) => (
-              <div
-                key={p.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '12px',
-                  background: '#fff',
-                  border: '1px solid var(--line)',
-                  borderRadius: '4px'
-                }}
-              >
-                <div>
-                  <strong>{p.name}</strong>
-                  <span style={{ display: 'block', fontSize: '13px', color: 'var(--muted)' }}>
-                    {money(p.price)}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                  {p.variants.length > 0 ? (
-                    p.variants.map((v) => (
-                      <button
-                        key={v.id}
-                        type="button"
-                        className="button secondary"
-                        style={{ padding: '6px 12px', fontSize: '12px', minHeight: '36px' }}
-                        onClick={() => add(p, v)}
-                      >
-                        {v.name} · {money(v.price)}
-                      </button>
-                    ))
-                  ) : (
-                    <button
-                      type="button"
-                      className="button secondary"
-                      style={{ padding: '6px 12px', fontSize: '12px', minHeight: '36px' }}
-                      onClick={() => add(p)}
+          <p role="status" style={{ textAlign: 'center', padding: '30px', color: 'var(--muted)' }}>
+            {e.modal_loading}
+          </p>
+        ) : filteredChoices.length > 0 ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+              maxHeight: '440px',
+              overflowY: 'auto',
+              paddingRight: dir === 'rtl' ? 0 : '4px',
+              paddingLeft: dir === 'rtl' ? '4px' : 0
+            }}
+          >
+            {filteredChoices.map((p) => {
+              const activeVariantId = selectedVariants[p.id] || (p.variants[0]?.id ?? '');
+              const activeVariant = p.variants.find((v) => v.id === activeVariantId);
+              const displayPrice = activeVariant ? activeVariant.price : p.price;
+
+              return (
+                <div
+                  key={p.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '14px',
+                    padding: '12px',
+                    background: '#fff',
+                    border: '1px solid var(--line)',
+                    borderRadius: '8px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
+                  }}
+                >
+                  <StorefrontImage
+                    src={p.image}
+                    alt={p.name}
+                    width={72}
+                    height={88}
+                    style={{
+                      objectFit: 'contain',
+                      borderRadius: '6px',
+                      background: '#fcfaf6',
+                      flexShrink: 0
+                    }}
+                  />
+
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <strong
+                      style={{
+                        display: 'block',
+                        fontSize: '15px',
+                        marginBottom: '4px',
+                        color: 'var(--ink)'
+                      }}
                     >
-                      Ajouter
-                    </button>
-                  )}
+                      {p.name}
+                    </strong>
+                    <div style={{ fontSize: '14px', color: 'var(--olive)', fontWeight: 600 }}>
+                      {money(displayPrice)}
+                    </div>
+
+                    {p.variants.length > 0 && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: '6px',
+                          flexWrap: 'wrap',
+                          marginTop: '8px'
+                        }}
+                      >
+                        {p.variants.map((v) => (
+                          <button
+                            key={v.id}
+                            type="button"
+                            className={`badge ${activeVariantId === v.id ? 'confirmed' : 'pending'}`}
+                            style={{
+                              cursor: 'pointer',
+                              border: activeVariantId === v.id ? '1px solid var(--olive)' : '1px solid var(--line)',
+                              background: activeVariantId === v.id ? 'var(--olive)' : '#fff',
+                              color: activeVariantId === v.id ? '#fff' : 'var(--ink)',
+                              padding: '3px 8px',
+                              fontSize: '11px',
+                              borderRadius: '4px'
+                            }}
+                            onClick={() =>
+                              setSelectedVariants({ ...selectedVariants, [p.id]: v.id })
+                            }
+                          >
+                            {v.name} ({money(v.price)})
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    className="button secondary"
+                    style={{
+                      padding: '8px 14px',
+                      fontSize: '13px',
+                      minHeight: '38px',
+                      flexShrink: 0
+                    }}
+                    onClick={() => add(p, p.variants.length ? activeVariantId : null)}
+                  >
+                    + {e.modal_add_btn}
+                  </button>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
-          <p style={{ color: 'var(--muted)' }}>Aucun produit trouvé.</p>
+          <p
+            style={{
+              color: 'var(--muted)',
+              textAlign: 'center',
+              padding: '30px'
+            }}
+          >
+            {e.modal_no_products}
+          </p>
         )}
 
-        <div style={{ marginTop: '20px', textAlign: 'right' }}>
+        <div style={{ marginTop: '20px', textAlign: dir === 'rtl' ? 'left' : 'right' }}>
           <button
             type="button"
             className="button secondary"
             onClick={() => dialog.current?.close()}
           >
-            Fermer
+            {e.modal_close_btn}
           </button>
         </div>
       </dialog>
